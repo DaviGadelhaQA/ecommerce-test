@@ -1,19 +1,19 @@
+import loginPage from "../pages/loginPage";
+import ProductPage from "../pages/ProductPage";
+
 describe('End to End ecommerce test', () => {
     beforeEach(() => {
         cy.visit('/');
+        cy.fixture('example').then(function(data) { this.data = data });
     })
-    it('Submit Order', () => {
-        const productName = 'Nokia Edge'
-        cy.get('#username').type(Cypress.env('username'));
-        cy.get('#password').type(Cypress.env('password'));
-        cy.get('input[type="submit"]').click();
+    it('Submit Order', function (){
+        const productName = this.data.productName;
+        loginPage.login(this.data.username, Cypress.env('password'));
+        
         cy.contains('Shop Name').should('be.visible');
         cy.get('app-card').should('have.length', 4);
 
-        cy.get('app-card').filter(`:contains("${productName}")`).then(($element) => {
-            cy.wrap($element).should('have.length', 1);
-            cy.wrap($element).contains('button', 'Add').click();
-        });
+        ProductPage.selectProduct(productName);
 
         cy.contains('a', 'Checkout').click();
         let sum = 0;
