@@ -6,6 +6,10 @@ class ProductPage
             cy.wrap($element).contains('button', 'Add').click();
         });
     }
+
+    goToCart(){
+        cy.contains('a', 'Checkout').click();
+    }
 }
 
 export default new ProductPage();
